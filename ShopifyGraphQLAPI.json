@@ -2,7 +2,8 @@
 "swagger": "2.0",
 "info": {
 "version": "1.0.0",
-"title": "Shopify GraphQL"
+"title": "Shopify Company GraphQL API",
+"description": "Retrieve Shopify company data"
 },
 "host": "tu-i-b2b-dev.myshopify.com",
 "basePath": "/admin/api/2026-04",
@@ -32,7 +33,10 @@
 ],
 "responses": {
 "200": {
-"description": "Success"
+"description": "Success",
+"schema": {
+"$ref": "#/definitions/GraphQLResponse"
+}
 }
 }
 }
@@ -46,6 +50,78 @@
 "type": "string"
 }
 }
+},
+
+```
+"GraphQLResponse": {
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "#/definitions/Data"
+    }
+  }
+},
+
+"Data": {
+  "type": "object",
+  "properties": {
+    "companies": {
+      "$ref": "#/definitions/Companies"
+    }
+  }
+},
+
+"Companies": {
+  "type": "object",
+  "properties": {
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CompanyEdge"
+      }
+    }
+  }
+},
+
+"CompanyEdge": {
+  "type": "object",
+  "properties": {
+    "node": {
+      "$ref": "#/definitions/Company"
+    }
+  }
+},
+
+"Company": {
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+
+    "companyAnnualRevenue": {
+      "$ref": "#/definitions/ValueField"
+    },
+
+    "vatNumber": {
+      "$ref": "#/definitions/ValueField"
+    },
+
+    "contactTitle": {
+      "$ref": "#/definitions/ValueField"
+    }
+  }
+},
+
+"ValueField": {
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "string"
+    }
+  }
 }
+```
+
 }
 }
