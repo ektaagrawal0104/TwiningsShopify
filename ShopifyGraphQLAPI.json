@@ -1,45 +1,51 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "Shopify GraphQL"
-  },
-  "host": "tu-i-b2b-dev.myshopify.com",
-  "basePath": "/admin/api/2026-04",
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "paths": {
-    "/graphql.json": {
-      "post": {
-        "operationId": "GetCompanies",
-        "parameters": [
-          {
-            "name": "query",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "query": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    }
-  }
+"swagger": "2.0",
+"info": {
+"version": "1.0.0",
+"title": "Shopify GraphQL"
+},
+"host": "tu-i-b2b-dev.myshopify.com",
+"basePath": "/admin/api/2026-04",
+"schemes": [
+"https"
+],
+"consumes": [
+"application/json"
+],
+"produces": [
+"application/json"
+],
+"paths": {
+"/graphql.json": {
+"post": {
+"operationId": "GetCompanies",
+"summary": "Get Companies",
+"parameters": [
+{
+"name": "body",
+"in": "body",
+"required": true,
+"schema": {
+"$ref": "#/definitions/GraphQLRequest"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Success"
+}
+}
+}
+}
+},
+"definitions": {
+"GraphQLRequest": {
+"type": "object",
+"properties": {
+"query": {
+"type": "string"
+}
+}
+}
+}
 }
