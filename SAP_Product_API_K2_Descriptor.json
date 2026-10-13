@@ -1,0 +1,314 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "SAP S/4HANA Product API",
+    "description": "Minimal K2 REST descriptor for SAP API_PRODUCT_SRV OData V2: get product, create product with description, update cross-plant status.",
+    "version": "1.0.0"
+  },
+  "host": "s4pre-prod.twiningsovo.com",
+  "basePath": "/sap/opu/odata/sap/API_PRODUCT_SRV",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/A_Product('{Product}')": {
+      "get": {
+        "operationId": "GetProduct",
+        "summary": "Get product by product number",
+        "parameters": [
+          {
+            "name": "Product",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "SAP material number, e.g. 110000999"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "default": "application/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product retrieved",
+            "schema": {
+              "$ref": "#/definitions/ProductEntry"
+            }
+          },
+          "default": {
+            "description": "SAP API error"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "UpdateProductCrossPlantStatus",
+        "summary": "Update product cross-plant status",
+        "parameters": [
+          {
+            "name": "Product",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CrossPlantStatusUpdate"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Token fetched from SAP using X-CSRF-Token: Fetch"
+          },
+          {
+            "name": "Cookie",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Session cookies from token-fetch response, if required"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "default": "application/json"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "default": "application/json"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Product status updated"
+          },
+          "default": {
+            "description": "SAP API error"
+          }
+        }
+      }
+    },
+    "/A_Product": {
+      "post": {
+        "operationId": "CreateProduct",
+        "summary": "Create product with description",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductCreate"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Token fetched from SAP using X-CSRF-Token: Fetch"
+          },
+          {
+            "name": "Cookie",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Session cookies from token-fetch response, if required"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "default": "application/json"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "default": "application/json"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Product created",
+            "schema": {
+              "$ref": "#/definitions/ProductEntry"
+            }
+          },
+          "default": {
+            "description": "SAP API error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CrossPlantStatusUpdate": {
+      "type": "object",
+      "required": [
+        "CrossPlantStatus"
+      ],
+      "properties": {
+        "CrossPlantStatus": {
+          "type": "string",
+          "description": "Status code, e.g. Z3"
+        }
+      }
+    },
+    "ProductCreate": {
+      "type": "object",
+      "required": [
+        "Product",
+        "ProductType",
+        "IndustrySector",
+        "ProductGroup",
+        "BaseUnit",
+        "NetWeight",
+        "WeightUnit",
+        "ProductHierarchy",
+        "to_Description"
+      ],
+      "properties": {
+        "Product": {
+          "type": "string"
+        },
+        "ProductType": {
+          "type": "string",
+          "default": "ZFER"
+        },
+        "IndustrySector": {
+          "type": "string",
+          "default": "2"
+        },
+        "ProductGroup": {
+          "type": "string",
+          "default": "10010204"
+        },
+        "BaseUnit": {
+          "type": "string",
+          "default": "EA"
+        },
+        "NetWeight": {
+          "type": "string",
+          "default": "0.145"
+        },
+        "WeightUnit": {
+          "type": "string",
+          "default": "KG"
+        },
+        "ProductHierarchy": {
+          "type": "string",
+          "default": "100100320000200002"
+        },
+        "to_Description": {
+          "type": "object",
+          "required": [
+            "results"
+          ],
+          "properties": {
+            "results": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductDescription"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ProductDescription": {
+      "type": "object",
+      "required": [
+        "Product",
+        "Language",
+        "ProductDescription"
+      ],
+      "properties": {
+        "Product": {
+          "type": "string"
+        },
+        "Language": {
+          "type": "string",
+          "default": "EN"
+        },
+        "ProductDescription": {
+          "type": "string"
+        }
+      }
+    },
+    "ProductEntry": {
+      "type": "object",
+      "properties": {
+        "d": {
+          "type": "object",
+          "properties": {
+            "Product": {
+              "type": "string"
+            },
+            "ProductType": {
+              "type": "string"
+            },
+            "CrossPlantStatus": {
+              "type": "string"
+            },
+            "CrossPlantStatusValidityDate": {
+              "type": "string"
+            },
+            "ProductGroup": {
+              "type": "string"
+            },
+            "BaseUnit": {
+              "type": "string"
+            },
+            "NetWeight": {
+              "type": "string"
+            },
+            "WeightUnit": {
+              "type": "string"
+            },
+            "ProductHierarchy": {
+              "type": "string"
+            },
+            "IndustrySector": {
+              "type": "string"
+            },
+            "IsBatchManagementRequired": {
+              "type": "boolean"
+            },
+            "to_Description": {
+              "type": "object",
+              "properties": {
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ProductDescription"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
