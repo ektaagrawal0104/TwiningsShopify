@@ -1,0 +1,135 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "SAP Commodity Code CPI Batch API",
+    "description": "Batch assignment descriptor for the SAP CPI commodity-code endpoint. POST a JSON object containing an assign_material array of commodity assignments. The CPI endpoint has been tested with multiple entries in one request.",
+    "version": "1.1.1"
+  },
+  "host": "dev-optimus-d07lurdy.it-cpi005-rt.cfapps.eu20.hana.ondemand.com",
+  "basePath": "/http/mtd/k2",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/xml"
+  ],
+  "paths": {
+    "/inbound": {
+      "post": {
+        "tags": [
+          "Commodity Code"
+        ],
+        "summary": "Assign commodity codes to multiple materials",
+        "description": "Sends one or more material commodity-code assignments in a single request.",
+        "operationId": "AssignCommodityCodesBatch",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Batch request containing an array of material assignments.",
+            "schema": {
+              "$ref": "#/definitions/CommodityCodeAssignmentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CPI returns an XML response body, for example <assign_material><DummyFunctionImportResult><IsInvalid>false</IsInvalid></DummyFunctionImportResult></assign_material>. Treat the body as text.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "description": "CPI error response body, treated as text.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CommodityCodeAssignment": {
+      "type": "object",
+      "required": [
+        "matnr",
+        "stcts",
+        "comco",
+        "spras",
+        "text",
+        "datab",
+        "datbi"
+      ],
+      "properties": {
+        "matnr": {
+          "type": "string",
+          "description": "Material number"
+        },
+        "stcts": {
+          "type": "string",
+          "description": "Commodity code numbering scheme, e.g. ZGHS"
+        },
+        "comco": {
+          "type": "string",
+          "description": "Commodity code"
+        },
+        "spras": {
+          "type": "string",
+          "description": "Language key, e.g. EN"
+        },
+        "text": {
+          "type": "string",
+          "description": "Commodity code description"
+        },
+        "datab": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Valid-from date/time"
+        },
+        "datbi": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Valid-to date/time"
+        }
+      }
+    },
+    "CommodityCodeAssignmentRequest": {
+      "type": "object",
+      "required": [
+        "assign_material"
+      ],
+      "properties": {
+        "assign_material": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CommodityCodeAssignment"
+          },
+          "minItems": 1,
+          "description": "One or more material commodity-code assignments."
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic",
+      "description": "Use the CPI username and password supplied by the integration team."
+    }
+  }
+}
