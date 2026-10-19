@@ -1,0 +1,145 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "SAP Commodity Code CPI Assignment API",
+    "description": "Calls the tested CPI HTTP endpoint to assign a commodity code to a material.",
+    "version": "1.0.0"
+  },
+  "host": "dev-optimus-d07lurdy.it-cpi005-rt.cfapps.eu20.hana.ondemand.com",
+  "basePath": "/http/mtd/k2",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/xml"
+  ],
+  "paths": {
+    "/inbound": {
+      "post": {
+        "operationId": "AssignCommodityCode",
+        "summary": "Assign commodity code to material",
+        "description": "Submits the assignment payload to the CPI endpoint. The endpoint was tested with POST and Basic Auth in Postman.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CommodityCodeAssignmentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assignment response",
+            "schema": {
+              "$ref": "#/definitions/CommodityCodeAssignmentResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server or integration flow error"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CommodityCodeAssignmentRequest": {
+      "type": "object",
+      "required": [
+        "assign_material"
+      ],
+      "properties": {
+        "assign_material": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CommodityCodeAssignment"
+          }
+        }
+      }
+    },
+    "CommodityCodeAssignment": {
+      "type": "object",
+      "required": [
+        "matnr",
+        "stcts",
+        "comco",
+        "spras",
+        "text",
+        "datab",
+        "datbi"
+      ],
+      "properties": {
+        "matnr": {
+          "type": "string",
+          "description": "Material number",
+          "example": "709014759"
+        },
+        "stcts": {
+          "type": "string",
+          "description": "Trade classification numbering scheme",
+          "example": "ZGHS"
+        },
+        "comco": {
+          "type": "string",
+          "description": "Commodity code",
+          "example": "0902 30"
+        },
+        "spras": {
+          "type": "string",
+          "description": "Language key",
+          "example": "EN"
+        },
+        "text": {
+          "type": "string",
+          "description": "Assignment text",
+          "example": "Test"
+        },
+        "datab": {
+          "type": "string",
+          "description": "Valid-from date/time, ISO format",
+          "example": "2026-09-26T00:00:00"
+        },
+        "datbi": {
+          "type": "string",
+          "description": "Valid-to date/time, ISO format",
+          "example": "2026-11-01T23:59:59"
+        }
+      }
+    },
+    "CommodityCodeAssignmentResponse": {
+      "type": "object",
+      "properties": {
+        "DummyFunctionImportResult": {
+          "type": "object",
+          "properties": {
+            "IsInvalid": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "description": "The tested CPI response is XML with DummyFunctionImportResult and IsInvalid."
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic",
+      "description": "Use the CPI username and password supplied by the integration team."
+    }
+  }
+}
