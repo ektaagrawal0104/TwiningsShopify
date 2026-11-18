@@ -1,0 +1,117 @@
+
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "K2AIAssistant",
+    "version": "v2"
+  },
+  "host": "k2-ai-api-b3gmgtcbf8djdbgb.westeurope-01.azurewebsites.net",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/Knowledge": {
+      "post": {
+        "tags": [
+          "Knowledge"
+        ],
+        "operationId": "PostKnowledge",
+        "summary": "Ask the K2 Knowledge Assistant",
+        "description": "Submits a question and returns an AI-generated answer with supporting knowledge sources.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChatRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/KnowledgeResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ChatRequest": {
+      "type": "object",
+      "required": [
+        "question"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "description": "Question submitted to the Knowledge Assistant."
+        }
+      }
+    },
+    "KnowledgeResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string",
+          "description": "AI-generated answer."
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KnowledgeSource"
+          }
+        }
+      }
+    },
+    "KnowledgeSource": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "sourceUrl": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "procedureName": {
+          "type": "string"
+        },
+        "sourceType": {
+          "type": "string"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}
