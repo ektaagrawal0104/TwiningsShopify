@@ -3,7 +3,7 @@
   "swagger": "2.0",
   "info": {
     "title": "K2AIAssistant",
-    "version": "v2"
+    "version": "v3"
   },
   "host": "k2-ai-api-b3gmgtcbf8djdbgb.westeurope-01.azurewebsites.net",
   "basePath": "/",
@@ -24,7 +24,7 @@
         ],
         "operationId": "PostKnowledge",
         "summary": "Ask the K2 Knowledge Assistant",
-        "description": "Submits a question and returns an AI-generated answer with supporting knowledge sources.",
+        "description": "Submits a question and returns an AI-generated answer with supporting source references included in the response text.",
         "consumes": [
           "application/json"
         ],
@@ -76,40 +76,7 @@
       "properties": {
         "response": {
           "type": "string",
-          "description": "AI-generated answer."
-        },
-        "sources": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/KnowledgeSource"
-          }
-        }
-      }
-    },
-    "KnowledgeSource": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "content": {
-          "type": "string"
-        },
-        "sourceUrl": {
-          "type": "string"
-        },
-        "category": {
-          "type": "string"
-        },
-        "procedureName": {
-          "type": "string"
-        },
-        "sourceType": {
-          "type": "string"
-        },
-        "lastModified": {
-          "type": "string",
-          "format": "date-time"
+          "description": "AI-generated answer followed by relevant source references."
         }
       }
     }
